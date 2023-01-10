@@ -15,8 +15,6 @@ const Home = ()=>{
 
     const [bookmarks, setBookmarks] = useState([]);
     
-
-
     const openForm = ()=>{
         setShowForm(true)
     }
@@ -34,8 +32,6 @@ const Home = ()=>{
         let linkValue = e.target.value;
         setLink(linkValue);
     }
-
-   
     const handleSubmit = (e)=>{ 
         e.preventDefault();
         bookmarks.push(bookmarkItem);    
@@ -91,7 +87,7 @@ const Home = ()=>{
                 {
                         showForm ?
                         <div className="ModalBox-container">
-                            <ModalBox id="Modal" save={handleSubmit} closeButton="Ranya" clicked={clickToClose} valuePropName={name} valuePropLink={link} onChangeName={nameInput} onChangeLink={linkInput} requireName={!nameInput}/>
+                            <ModalBox id="Modal" save={handleSubmit} closeButton="Ranya" clicked={clickToClose} valuePropName={name} valuePropLink={link} onChangeName={nameInput} onChangeLink={linkInput} requireName={!name}/>
                         </div>
                         :
                         null
