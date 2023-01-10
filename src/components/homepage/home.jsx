@@ -1,13 +1,20 @@
-import React, {Component, useState} from 'react'
+import React, {Component, useState, useEffect} from 'react'
 import "./home.css"
 import ModalBox from '../modal/modal';
 
 const Home = ()=>{
     const [showForm, setShowForm] = useState(false);
-    const [bookmarkItem, setBookmarkItem] = useState([])
-    const [bookmarks, setBookmarks] = useState([]);
+    // const [bookmarkItem, setBookmarkItem] = useState([])
+    // const id = 
     const [link, setLink] = useState("https://www.");
     const [name, setName] = useState("");
+    const bookmarkItem = {
+        name, 
+        link,
+        };
+
+    const [bookmarks, setBookmarks] = useState([]);
+    
 
 
     const openForm = ()=>{
@@ -28,37 +35,39 @@ const Home = ()=>{
         setLink(linkValue);
     }
 
-    const handleSubmit = (e)=>{
+   
+    const handleSubmit = (e)=>{ 
         e.preventDefault();
-        // let bookmarkItem = [];
-        bookmarkItem.push(link,name);
-        setBookmarkItem(bookmarkItem);
-        // console.log(bookmarkItem);
-
-        bookmarks.push(bookmarkItem);
-        setBookmarks(bookmarks);
-        console.log(bookmarks);
-
-        // stocker la donnee dans le local storage
-        localStorage.setItem("keyLocalStorage", JSON.stringify(bookmarks));
-
-        // mettre a jour le DOM avec le Data du local storage
-        let data = localStorage.getItem("keyLocalStorage")
-        ? localStorage.getItem("keyLocalStorage") 
-        : [] ;
-        setBookmarks([JSON.parse(data)])
-
+        bookmarks.push(bookmarkItem);    
+        // local storage of the bookmarks array :
+        localStorage.setItem("keyLocalStorage", JSON.stringify(bookmarks)); 
         // Making the modal box disappear after the submit
         setShowForm(false)
       }
 
+    // const handleDelete = (id) => {
+    //     bookmarks.splice(id,1);
+    //     setBookmarks(bookmarks)
+    //     localStorage.setItem("keyLocalStorage", JSON.stringify(bookmarks));
+    //     window.location.reload(false);
+    // }
+        
+    
+        useEffect(()=>{
+            const json = localStorage.getItem("keyLocalStorage");
+            const loadBook =JSON.parse(json);
+            if(loadBook){
+                setBookmarks(loadBook)
+            }
+        },[]);
+         
+        useEffect(()=>{
+            if (bookmarks.length>0) {
+                const json = JSON.stringify(bookmarks);
+                localStorage.setItem("keyLocalStorage",json)
+            }
+        },[bookmarks])
 
-    //   todoArray.map((item, index) => {
-    //     return (
-    //       <ListItem key={index} id={index} handleDelete={handleDelete}>
-    //         {item}
-
-            
 
     return (<div className='homepage-container'>
                 <div className='button-container'>
@@ -68,17 +77,17 @@ const Home = ()=>{
                 {
                     bookmarks.map((bookmarkItem, index) => {
                         return (
-                            <div className="bookmark" key={index} id={index}>
-                                <a href={bookmarkItem.link}> {bookmarkItem.name} </a> 
-                                <i className='bx bx-x'></i>
+                            <div className="bookmark" key={index} >
+                                <a href={bookmarkItem.link} target="_blank"> {bookmarkItem.name} </a> 
+                                <i onClick={()=>{
+                                    bookmarks.splice(index,1);
+                                    setBookmarks(bookmarks)
+                                    localStorage.setItem("keyLocalStorage", JSON.stringify(bookmarks));
+                                    window.location.reload(false);
+                                }} className='bx bx-x'></i>
                             </div>
                         )})
                 }
-
-                {/* <div className="bookmark">
-                    <a href="#">Just a test Bookmark</a> 
-                    <i className='bx bx-x'></i>
-                </div> */}
                 {
                         showForm ?
                         <div className="ModalBox-container">
