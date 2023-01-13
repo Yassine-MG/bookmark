@@ -5,17 +5,13 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import "./modal.css";
 import CloseButton from 'react-bootstrap/CloseButton';
-import validator from 'validator'
 
-// CONTROLE DE SAISIE SUR L'URL
-
-// *****************************
 
 
 export default class ModalBox extends Component {
 
   render() {
-    const {classProp, closeButton, clicked, save, valuePropName, valuePropLink, onChangeName, onChangeLink, requireName} = this.props;
+    const {classProp, closeButton, clicked, save, valuePropName, valuePropLink, onChangeName, onChangeLink, requireName, requiredLink} = this.props;
     
     return <div
       className={classProp}
@@ -39,8 +35,9 @@ export default class ModalBox extends Component {
               </InputGroup>  
                     <Form.Label htmlFor="basic-url">Your vanity URL</Form.Label>
               <InputGroup className="mb-3">
-                <Form.Control ref= {this.myRef} pattern="https://www.+" type="url" id="basic-url" aria-describedby="basic-addon3" value={valuePropLink}
-                      onChange={onChangeLink} />
+                <Form.Control pattern="https://www.+" type="url" id="basic-url" aria-describedby="basic-addon3" value={valuePropLink}
+                      onChange={onChangeLink} required={requiredLink}
+                      />
               </InputGroup>
               <Button disabled={requireName} type="submit">Save</Button>
             </Modal.Body>
